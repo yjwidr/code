@@ -27,6 +27,10 @@
             <AppenderRef ref="apiserver" />
             <AppenderRef ref="Console" />   
         </Logger>
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
+            <AppenderRef ref="apiserver" />
+            <AppenderRef ref="Console" />   
+        </Logger>
         <Root level="info">
             <AppenderRef ref="apiserver" />
             <AppenderRef ref="Console" />
