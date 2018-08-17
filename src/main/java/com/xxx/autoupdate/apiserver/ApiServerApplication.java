@@ -8,10 +8,13 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaAuditing
 @ServletComponentScan(basePackages = {"com.xxx.autoupdate.apiserver.filter"})
+@EnableDubboConfiguration
 public class ApiServerApplication{
     private static Logger logger = LogManager.getLogger(ApiServerApplication.class.getName());
 

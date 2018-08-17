@@ -8,9 +8,10 @@ import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.xxx.autoupdate.apiserver.dao.UserRepository;
 import com.xxx.autoupdate.apiserver.exception.BusinessException;
 import com.xxx.autoupdate.apiserver.exception.ErrorCodes;
@@ -23,6 +24,7 @@ import com.xxx.autoupdate.apiserver.util.MD5Util;
 
 @Service
 @Transactional(rollbackOn=Exception.class)
+@Component
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
