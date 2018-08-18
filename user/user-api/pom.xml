@@ -2,16 +2,15 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.xxx</groupId>
-	<artifactId>user-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>user-api</name>
 	<parent>
 		<groupId>com.xxx</groupId>
 		<artifactId>user</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>user-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>user-api</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -23,4 +22,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<groupId>com.xxx</groupId>
 </project>
