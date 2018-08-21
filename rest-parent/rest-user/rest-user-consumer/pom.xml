@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<parent>
+		<groupId>com.xxx</groupId>
+		<artifactId>rest-user</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<!-- <groupId>com.xxx</groupId> -->
+	<artifactId>rest-user-consumer</artifactId>
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<name>rest-user-consumer</name>
+	<description>rest-user-consumer</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.xxx</groupId>
+			<artifactId>rest-common</artifactId>
+			<version>${rest.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.xxx</groupId>
+			<artifactId>rest-user-api</artifactId>
+			<version>${rest.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.spring.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+</project>

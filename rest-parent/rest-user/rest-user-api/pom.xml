@@ -4,23 +4,26 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<parent>
 		<groupId>com.xxx</groupId>
-		<artifactId>user</artifactId>
+		<artifactId>rest-user</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.xxx</groupId>
-	<artifactId>user-provider</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>user-provider</name>
+	<!-- <groupId>com.xxx</groupId> -->
+	<artifactId>rest-user-api</artifactId>
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<name>rest-user-api</name>
+	<description>rest-user-api</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
 </project>

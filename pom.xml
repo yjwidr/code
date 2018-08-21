@@ -14,7 +14,8 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
     <modules>
-        <module>user</module>
+        <module>rest-user</module>
+        <module>rest-common</module>
     </modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -109,7 +110,7 @@
 	    </dependency>		
 	</dependencies>
 
-	<build>
+<!-- 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -127,7 +128,7 @@
 			    </executions>				
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 	<repositories>
 		<repository>
 			<id>spring-releases</id>
