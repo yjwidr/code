@@ -30,6 +30,7 @@
 		<jaxb-api.version>2.3.0</jaxb-api.version>
 		<springboot.version>2.0.2.RELEASE</springboot.version>
 		<postgresql.version>42.2.2</postgresql.version>
+		<jackson-annotations.version>2.9.6</jackson-annotations.version>
 	</properties>
     <dependencyManagement>
 		<dependencies>
@@ -78,7 +79,7 @@
 		        <groupId>com.alibaba.spring.boot</groupId>
 		        <artifactId>dubbo-spring-boot-starter</artifactId>
 		        <version>${dubbo.version}</version>
-		    </dependency> 		
+		    </dependency>
 		</dependencies>
     </dependencyManagement>
 <!-- 	<build>

@@ -9,16 +9,28 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<!-- <groupId>com.xxx</groupId> -->
-	<artifactId>rest-common</artifactId>
+	<artifactId>rest-common-util</artifactId>
 	<!-- <version>0.0.1-SNAPSHOT</version> -->
-	<packaging>pom</packaging>
-	<name>rest-common</name>
-	<description>rest-common</description>
-	<modules>
-		<module>rest-common-util</module>
-		<module>rest-common-web</module>
-	</modules>
+	<name>rest-common-util</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+	</dependencies>
 </project>
