@@ -1,5 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.2.RELEASE</version>
+		<relativePath />
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.xxx</groupId>
 	<artifactId>rest-parent</artifactId>
@@ -7,12 +13,6 @@
 	<packaging>pom</packaging>
 	<name>rest-parent</name>
 	<description>rest-parent</description>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.2.RELEASE</version>
-		<relativePath />
-	</parent>
     <modules>
         <module>rest-user</module>
         <module>rest-common</module>
@@ -31,6 +31,8 @@
 		<springboot.version>2.0.2.RELEASE</springboot.version>
 		<postgresql.version>42.2.2</postgresql.version>
 		<jackson-annotations.version>2.9.6</jackson-annotations.version>
+		<zookeeper.version>3.4.13</zookeeper.version>
+		<zkclient.version>0.10</zkclient.version>
 	</properties>
     <dependencyManagement>
 		<dependencies>
@@ -80,6 +82,16 @@
 		        <artifactId>dubbo-spring-boot-starter</artifactId>
 		        <version>${dubbo.version}</version>
 		    </dependency>
+			<dependency>
+			    <groupId>org.apache.zookeeper</groupId>
+			    <artifactId>zookeeper</artifactId>
+			    <version>${zookeeper.version}</version>
+			</dependency>
+	        <dependency>
+	            <groupId>com.101tec</groupId>
+	            <artifactId>zkclient</artifactId>
+	            <version>${zkclient.version}</version>
+	        </dependency>		    
 		</dependencies>
     </dependencyManagement>
 <!-- 	<build>

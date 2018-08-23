@@ -29,7 +29,7 @@ import com.xxx.autoupdate.apiserver.util.ResponseEntity;
 @RequestMapping(Constants.AUTH)
 public class LoginController {
     private static Logger logger = LogManager.getLogger(LoginConsumerLauncher.class.getName());
-    @Reference(url = "dubbo://10.10.0.60:20880")
+    @Reference
     private UserService userService;
     @Value("${token.expired.time}")
     private Long expirtedTime;
