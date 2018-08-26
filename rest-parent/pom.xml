@@ -16,6 +16,7 @@
     <modules>
         <module>rest-user</module>
         <module>rest-common</module>
+		<module>rest-content</module>
     </modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,7 +28,6 @@
 		<commons-io.version>1.3.2</commons-io.version>
 		<dubbo.version>2.0.0</dubbo.version>
 		<rest.version>0.0.1-SNAPSHOT</rest.version>
-		<jaxb-api.version>2.3.0</jaxb-api.version>
 		<springboot.version>2.0.2.RELEASE</springboot.version>
 		<postgresql.version>42.2.2</postgresql.version>
 		<jackson-annotations.version>2.9.6</jackson-annotations.version>

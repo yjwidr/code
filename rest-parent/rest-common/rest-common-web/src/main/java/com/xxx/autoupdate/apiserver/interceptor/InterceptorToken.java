@@ -26,7 +26,7 @@ import com.xxx.autoupdate.apiserver.util.UserThreadLocal;
  */
 public class InterceptorToken implements HandlerInterceptor {
 
-    @Reference(url = "dubbo://10.10.0.60:20880")
+    @Reference
     private UserService userService;
     @Value("${role.id.for.license}")
     private String roleIdforLicense;
