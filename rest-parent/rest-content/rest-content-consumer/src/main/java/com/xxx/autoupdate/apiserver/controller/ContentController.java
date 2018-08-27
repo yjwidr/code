@@ -127,10 +127,10 @@ public class ContentController {
     }
     @RequestMapping(value = Constants.ADD, method = RequestMethod.POST)
     @Permission(authorities={Constants.UPLOAD})
-    public ResponseEntity add(@Valid UploadOneContent uploadContent){
+    public ResponseEntity add(@Valid UploadOneContent uploadContent) throws IOException{
         UploadOneContent uoc=new UploadOneContent();
         uoc=JSON.parseObject(uploadContent.getInfo(), UploadOneContent.class);
-        uoc.setFile(uploadContent.getFile());
+        uoc.setBytes(uploadContent.getFile().getBytes());
         String softwareVersion = uoc.getSupportSoftwareVersion();
         int major = uoc.getContentVersion().getMajor();
         int minor = uoc.getContentVersion().getMinor();

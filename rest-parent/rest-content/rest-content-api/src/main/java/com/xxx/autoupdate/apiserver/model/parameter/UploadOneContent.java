@@ -1,14 +1,20 @@
 package com.xxx.autoupdate.apiserver.model.parameter;
 
+import java.io.Serializable;
+
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
-public class UploadOneContent {
+public class UploadOneContent implements Serializable {
+  private static final long serialVersionUID = 1L;
   private String contentName;
   private short contentPackageType;
   private String supportSoftwareVersion;
   private String description;
+  @Transient
   private MultipartFile file;
+  private byte[] bytes;
   private ContentVersion contentVersion;
   @NotBlank(message ="content info cannot be empty")
   private String info;
@@ -66,5 +72,11 @@ public class UploadOneContent {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+    public byte[] getBytes() {
+        return bytes;
+    }
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 }

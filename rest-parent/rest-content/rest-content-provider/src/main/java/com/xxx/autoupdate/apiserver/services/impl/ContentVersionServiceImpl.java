@@ -268,8 +268,7 @@ public class ContentVersionServiceImpl implements ContentVersionService {
 	public void uploadContentVersion2(UploadOneContent content, String userId) {
 
 		try {
-			MultipartFile file = content.getFile();
-			byte[] origialBytes = contentPackageService.getPackageBytes(file); //返回zip块 bytes
+			byte[] origialBytes = content.getBytes(); //返回zip块 bytes
 			TwoTuple<byte[], PackageInfo> tup = changePackageJsonInfo(origialBytes, content); //origialBytes;//
 			byte[] data = contentPackageService.pack2(tup.first, tup.second);
 			addContentVersionToDB(content, userId, tup.second, data);
@@ -344,7 +343,8 @@ public class ContentVersionServiceImpl implements ContentVersionService {
 			String packageFolderPath = packageFolderDir.toString();
 			//Path destFile 
 			String finalNeedPackage = finalNeedPackagePath.toString();
-			PackageInfo pi = contentPackageService.unpack(content.getFile(), tempOriginalZipPath, packageFolderPath);
+//			PackageInfo pi = contentPackageService.unpack(content.getFile(), tempOriginalZipPath, packageFolderPath);
+			PackageInfo pi = null;
 			if(pi.getDescription()==null || pi.getDescription() == "") {
 				pi.setDescription(content.getDescription()); 
 			}

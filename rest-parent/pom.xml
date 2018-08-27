@@ -33,6 +33,7 @@
 		<jackson-annotations.version>2.9.6</jackson-annotations.version>
 		<zookeeper.version>3.4.13</zookeeper.version>
 		<zkclient.version>0.10</zkclient.version>
+		<kryo.version>2.24.0</kryo.version>
 	</properties>
     <dependencyManagement>
 		<dependencies>
@@ -86,7 +87,12 @@
 	            <groupId>com.101tec</groupId>
 	            <artifactId>zkclient</artifactId>
 	            <version>${zkclient.version}</version>
-	        </dependency>		    
+	        </dependency>
+	        <dependency>
+	            <groupId>com.esotericsoftware.kryo</groupId>
+	            <artifactId>kryo</artifactId>
+	            <version>${kryo.version}</version>
+            </dependency>   		    
 		</dependencies>
     </dependencyManagement>
 	<build>
