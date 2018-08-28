@@ -1,10 +1,12 @@
 package com.xxx.autoupdate.apiserver.model.parameter;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotBlank;
 
-public class WhiteListUser {
-    
-	private String id;
+public class WhiteListUser implements Serializable{
+    private static final long serialVersionUID = 1L;
+    private String id;
 	private String contentVersionId;
 	@NotBlank(message ="licenseId cannot be empty")
 	private String licenseId;

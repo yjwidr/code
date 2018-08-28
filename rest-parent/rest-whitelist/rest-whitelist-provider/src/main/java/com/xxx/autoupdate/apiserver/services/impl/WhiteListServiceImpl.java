@@ -8,8 +8,9 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.xxx.autoupdate.apiserver.dao.IEUserInfoRepository;
 import com.xxx.autoupdate.apiserver.dao.WhiteListRepository;
 import com.xxx.autoupdate.apiserver.exception.BusinessException;
@@ -18,7 +19,8 @@ import com.xxx.autoupdate.apiserver.model.IEUserInfoEntity;
 import com.xxx.autoupdate.apiserver.model.WhiteListEntity;
 import com.xxx.autoupdate.apiserver.model.parameter.WhiteListUser;
 import com.xxx.autoupdate.apiserver.services.WhiteListService;
-@Service
+@Service(interfaceClass=WhiteListService.class)
+@Component
 public class WhiteListServiceImpl implements WhiteListService {
 	@Autowired
 	private WhiteListRepository whiteListRepository;

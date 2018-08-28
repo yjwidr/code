@@ -8,7 +8,6 @@ import javax.validation.Valid;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.xxx.autoupdate.apiserver.annotation.Permission;
@@ -29,8 +29,8 @@ import com.xxx.autoupdate.apiserver.util.ResponseEntity;
 @RequestMapping(Constants.WL)
 public class WhiteListController {
     //private static Logger logger = LogManager.getLogger(WhiteListController.class.getName());
-    @Autowired
-    private WhiteListService whiteListService;
+    @Reference
+    private WhiteListService whiteListService; 
 
     @RequestMapping(value = Constants.LIST, method = RequestMethod.GET)
     @Permission(authorities={Constants.PU})
