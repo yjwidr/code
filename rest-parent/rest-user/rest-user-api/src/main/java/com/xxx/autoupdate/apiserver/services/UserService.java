@@ -6,6 +6,7 @@ import com.xxx.autoupdate.apiserver.model.UserEntity;
 
 public interface UserService{
     UserEntity findByUsernameAndPassword(String username,String password) ; 
+    UserEntity findByUsername(String username) ; 
     UserEntity findById(String userId) ;
     List<String> findAuthoritiesByRoleId(String roleId);
     UserEntity save(UserEntity entity);

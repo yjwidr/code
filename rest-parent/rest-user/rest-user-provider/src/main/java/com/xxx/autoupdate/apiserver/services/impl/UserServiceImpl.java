@@ -75,4 +75,13 @@ public class UserServiceImpl implements UserService {
         entity=userRepository.save(entity);
         return entity;
     }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        if(ObjectUtils.isEmpty(user)){
+             throw new BusinessException(ErrorCodes.ERROR_USERNAME_NOT_EXISTS);
+        }
+        return user;
+    }
 }

@@ -17,6 +17,7 @@
 	<modules>
 		<module>rest-common-util</module>
 		<module>rest-common-web</module>
+		<module>rest-common-security</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
