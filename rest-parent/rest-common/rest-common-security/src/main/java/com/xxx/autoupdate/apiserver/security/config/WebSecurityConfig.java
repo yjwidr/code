@@ -17,7 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 
-//https://blog.csdn.net/linzhiqiang0316/article/details/78358907 
+//https://blog.csdn.net/linzhiqiang0316/article/details/78358907
+//http://357029540.iteye.com/blog/2329730
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -63,8 +64,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authorization/token").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
                 .headers()
                 .cacheControl();
+                
         httpSecurity
         .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
