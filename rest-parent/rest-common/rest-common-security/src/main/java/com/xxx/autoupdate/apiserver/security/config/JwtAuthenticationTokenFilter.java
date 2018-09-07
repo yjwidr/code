@@ -23,15 +23,13 @@ import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 import com.xxx.autoupdate.apiserver.services.UserService;
 import com.xxx.autoupdate.apiserver.token.JwtToken;
 
-@Component
+//@Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-
+    private static final String FILTER_APPLIED = "__spring_security_JwtAuthenticationTokenFilter_filterApplied";
     @Autowired
     private UserDetailsService userDetailsService;
     @Reference
     private UserService userService;
-    @Autowired 
-    private CustomUserService customUserService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {

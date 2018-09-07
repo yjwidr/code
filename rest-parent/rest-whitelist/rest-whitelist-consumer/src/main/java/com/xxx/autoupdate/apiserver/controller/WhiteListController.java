@@ -9,6 +9,9 @@ import javax.validation.Valid;
 //import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +36,8 @@ public class WhiteListController {
     private WhiteListService whiteListService; 
 
     @RequestMapping(value = Constants.LIST, method = RequestMethod.GET)
-    @Permission(authorities={Constants.PU})
+//    @Permission(authorities={Constants.PU})
+    @PreAuthorize("hasPermission(#a, '"+Constants.PU+"1')")
     public ResponseEntity list(@RequestParam(name=Constants.CVIP,required = true, defaultValue = Constants.EMP) @Length(min=1, max=32, message = Constants.CVI) String cvi){
         List<WhiteListUser> list=whiteListService.getWhiteList(cvi);
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();

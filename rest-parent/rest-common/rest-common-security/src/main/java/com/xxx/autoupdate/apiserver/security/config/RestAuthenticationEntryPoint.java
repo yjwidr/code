@@ -9,12 +9,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.xxx.autoupdate.apiserver.util.ResponseEntity;
+
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException ) throws IOException {
-        response.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text/javascript;charset=utf-8");
+        response.getWriter().write(JSONObject.toJSONString(ResponseEntity.unauthorized(),SerializerFeature.PrettyFormat));
     }
 }
