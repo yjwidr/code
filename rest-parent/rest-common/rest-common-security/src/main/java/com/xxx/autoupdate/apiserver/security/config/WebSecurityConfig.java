@@ -1,13 +1,6 @@
 package com.xxx.autoupdate.apiserver.security.config;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-
-import java.io.IOException;
 import java.util.Arrays;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,18 +14,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 
@@ -49,6 +42,9 @@ import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/authorization/token"));
+    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+
     @Bean
     protected UserDetailsService customUserService() {
         return new CustomUserService();
@@ -77,11 +73,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomPermissionEvaluator();
     }
 
-    @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
+//    @Bean
+//    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+//        return new JwtAuthenticationTokenFilter();
+//    }
+    @Override
+    public void configure(final WebSecurity web) {
+      web.ignoring().requestMatchers(PUBLIC_URLS);
     }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.authenticationProvider(daoAuthenticationProvider()).userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
@@ -98,10 +97,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(restAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/authorization/token").permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/authorization/token").permitAll()
+//                .anyRequest().authenticated()
+                .requestMatchers(PROTECTED_URLS)
+                .authenticated()
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
@@ -109,16 +111,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .cacheControl();       
     }
-    public static class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-        @Override
-        public void onAuthenticationSuccess(HttpServletRequest request,HttpServletResponse response, Authentication authentication)throws ServletException, IOException {
-            clearAuthenticationAttributes(request);
-        }
-        @Override
-        public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-            super.setRedirectStrategy(new NoRedirectStrategy());
-        }
+//    @Bean
+    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
+        final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setAuthenticationSuccessHandler(successHandler());
+        return filter;
     }
+
+    @Bean
+    public SimpleUrlAuthenticationSuccessHandler successHandler() {
+        final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
+        successHandler.setRedirectStrategy(new NoRedirectStrategy());
+        return successHandler;
+    }
+    
+//    public static class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+//        @Override
+//        public void onAuthenticationSuccess(HttpServletRequest request,HttpServletResponse response, Authentication authentication)throws ServletException, IOException {
+//            clearAuthenticationAttributes(request);
+//        }
+//        @Override
+//        public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+//            super.setRedirectStrategy(new NoRedirectStrategy());
+//        }
+//    }
+    
     public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
         @Override
         protected MethodSecurityExpressionHandler createExpressionHandler() {
@@ -126,10 +144,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             expressionHandler.setPermissionEvaluator(permissionEvaluator());
             return expressionHandler;
         }
-    } 
-    @Bean
-    public AuthenticationEntryPoint forbiddenEntryPoint() {
-      return new HttpStatusEntryPoint(FORBIDDEN);
     }
-
 }
