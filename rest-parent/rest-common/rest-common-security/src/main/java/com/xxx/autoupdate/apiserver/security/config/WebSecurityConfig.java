@@ -41,6 +41,10 @@ import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 //https://www.baeldung.com/spring-security-create-new-custom-security-expression
 //https://blog.csdn.net/greedystar/article/details/81220070
 //https://www.imooc.com/article/22886
+//https://github.com/jloisel
+//https://octoperf.com/blog/2018/03/08/securing-rest-api-spring-security/
+//https://blog.csdn.net/greedystar/article/details/81220070
+//https://github.com/GreedyStar/SpringBootDemo
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
