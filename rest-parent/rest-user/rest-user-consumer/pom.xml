@@ -17,9 +17,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.xxx</groupId>
 			<artifactId>rest-common-web</artifactId>
+			<version>${rest.version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.xxx</groupId>
+			<artifactId>rest-common-security</artifactId>
 			<version>${rest.version}</version>
 		</dependency>
 		<dependency>

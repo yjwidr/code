@@ -29,7 +29,7 @@ import com.xxx.autoupdate.apiserver.util.CommonUtils;
 import com.xxx.autoupdate.apiserver.util.ResponseEntity;
 import com.xxx.autoupdate.apiserver.util.UserThreadLocal;
 
-@Aspect
+//@Aspect
 @Component
 public class ControllerAspect {
 

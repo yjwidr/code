@@ -19,9 +19,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.xxx</groupId>
-			<artifactId>rest-common-web</artifactId>
+			<artifactId>rest-common-security</artifactId>
 			<version>${rest.version}</version>
 		</dependency>
+<!-- 		<dependency>
+			<groupId>com.xxx</groupId>
+			<artifactId>rest-common-web</artifactId>
+			<version>${rest.version}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>com.xxx</groupId>
 			<artifactId>rest-whitelist-api</artifactId>

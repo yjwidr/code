@@ -9,17 +9,17 @@ import com.xxx.autoupdate.apiserver.interceptor.InterceptorToken;
 
 @Configuration
 public class InterceptorConfig extends WebMvcConfigurationSupport {
-    @Bean
-    public InterceptorToken interceptorToken() {
-        return new InterceptorToken();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(interceptorToken())
-                .excludePathPatterns("/static/*")
-                .excludePathPatterns("/authorization/token")
-                .addPathPatterns("/**");
-        super.addInterceptors(registry);
-    }
+//    @Bean
+//    public InterceptorToken interceptorToken() {
+//        return new InterceptorToken();
+//    }
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(interceptorToken())
+//                .excludePathPatterns("/static/*")
+//                .excludePathPatterns("/authorization/token")
+//                .addPathPatterns("/**");
+//        super.addInterceptors(registry);
+//    }
 }
