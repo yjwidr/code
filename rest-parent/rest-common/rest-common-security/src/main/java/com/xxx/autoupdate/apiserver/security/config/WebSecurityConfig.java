@@ -38,12 +38,17 @@ import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 //https://octoperf.com/blog/2018/03/08/securing-rest-api-spring-security/
 //https://blog.csdn.net/greedystar/article/details/81220070
 //https://github.com/GreedyStar/SpringBootDemo
+
+//https://blog.csdn.net/sxdtzhaoxinguo/article/details/77965226
+//http://godjohnny.iteye.com/blog/2319877
+//http://www.cnblogs.com/softidea/p/6229553.html
+//https://blog.csdn.net/iverson2010112228/article/details/52837579	
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/authorization/token"));
-    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+//    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/authorization/token"));
+//    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
 
     @Bean
     protected UserDetailsService customUserService() {
@@ -77,10 +82,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
 //        return new JwtAuthenticationTokenFilter();
 //    }
-    @Override
-    public void configure(final WebSecurity web) {
-      web.ignoring().requestMatchers(PUBLIC_URLS);
-    }
+//    @Override
+//    public void configure(final WebSecurity web) {
+//      web.ignoring().requestMatchers(PUBLIC_URLS);
+//    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.authenticationProvider(daoAuthenticationProvider()).userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
@@ -96,35 +101,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
-                .authenticationProvider(daoAuthenticationProvider())
-//                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(restAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
 //                .antMatchers("/authorization/token").permitAll()
-//                .anyRequest().authenticated()
-                .requestMatchers(PROTECTED_URLS)
-                .authenticated()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .logout().disable()
-                .headers()
-                .cacheControl();       
+//              .authenticationProvider(daoAuthenticationProvider())
+//              .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+                .addFilter(new JWTLoginFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager()));
+//                .requestMatchers(PROTECTED_URLS)
+//                .authenticated()
+//                .and()
+//                .formLogin().loginProcessingUrl("/authorization/token").successHandler(successHandler());
+//                .formLogin().disable()
+//                .httpBasic().disable()
+//                .logout().disable()
+//                .headers()
+//                .cacheControl();       
     }
 //    @Bean
-    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
-        final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
-        filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(successHandler());
-        return filter;
-    }
+//    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
+//        final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
+//        filter.setAuthenticationManager(authenticationManager());
+//        filter.setAuthenticationSuccessHandler(successHandler());
+//        return filter;
+//    }
 
-    @Bean
-    public SimpleUrlAuthenticationSuccessHandler successHandler() {
-        final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setRedirectStrategy(new NoRedirectStrategy());
-        return successHandler;
-    }
+//    @Bean
+//    public SimpleUrlAuthenticationSuccessHandler successHandler() {
+//        final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
+//        successHandler.setRedirectStrategy(new NoRedirectStrategy());
+//        return successHandler;
+//    }
     
 //    public static class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 //        @Override
