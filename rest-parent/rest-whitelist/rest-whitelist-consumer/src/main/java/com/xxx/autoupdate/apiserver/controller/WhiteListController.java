@@ -37,7 +37,7 @@ public class WhiteListController {
 
     @RequestMapping(value = Constants.LIST, method = RequestMethod.GET)
 //    @Permission(authorities={Constants.PU})
-//    @PreAuthorize("hasPermission(#a, '"+Constants.PU+"1')")
+    @PreAuthorize("hasPermission(#a, '"+Constants.PU+"')")
     public ResponseEntity list(@RequestParam(name=Constants.CVIP,required = true, defaultValue = Constants.EMP) @Length(min=1, max=32, message = Constants.CVI) String cvi){
         List<WhiteListUser> list=whiteListService.getWhiteList(cvi);
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();

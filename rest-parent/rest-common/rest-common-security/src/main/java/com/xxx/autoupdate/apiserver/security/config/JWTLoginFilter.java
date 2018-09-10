@@ -16,13 +16,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xxx.autoupdate.apiserver.model.UserEntity;
 import com.xxx.autoupdate.apiserver.model.constant.Constants;
-import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
 import com.xxx.autoupdate.apiserver.token.JwtToken;
+import com.xxx.autoupdate.apiserver.util.CommonUtils;
 import com.xxx.autoupdate.apiserver.util.ResponseEntity;
  
 /**
@@ -33,12 +35,13 @@ import com.xxx.autoupdate.apiserver.util.ResponseEntity;
  * @author zhaoxinguo on 2017/9/12.
  */
 public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
-	@Value("${token.expired.time}")
-    private Long expirtedTime;
+
     private AuthenticationManager authenticationManager;
- 
-    public JWTLoginFilter(AuthenticationManager authenticationManager) {
+    private Long expirtedTime;
+    public JWTLoginFilter(AuthenticationManager authenticationManager,Long expirtedTime) {
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/authorization/token", "POST"));
         this.authenticationManager = authenticationManager;
+        this.expirtedTime=expirtedTime;
     }
  
     // 接收并解析用户凭证
@@ -49,8 +52,8 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         	ObjectMapper mapper = new ObjectMapper(); 
         	Map result = null; 
         	result = mapper.readValue(request.getReader(), Map.class); 
-        	String username = (String)result.get("username"); 
-        	String password = (String)result.get("password");
+        	String username = (String)result.get("userName"); 
+        	String password =CommonUtils.base64decode((String)result.get("password"));
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -64,7 +67,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
  
-    	String token = JwtToken.sign(((UserPrincipal)auth).getUser().getId(), expirtedTime);
+    	String token = JwtToken.sign(((UserEntity)auth.getPrincipal()).getUserName(), expirtedTime);
         Map<String,String> map = new HashMap<>();
         map.put(Constants.TOKEN, token);
         response.setCharacterEncoding("utf-8");

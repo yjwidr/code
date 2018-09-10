@@ -1,26 +1,22 @@
 package com.xxx.autoupdate.apiserver.security.config;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.xxx.autoupdate.apiserver.model.UserEntity;
-import com.xxx.autoupdate.apiserver.services.UserService;
+import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
 import com.xxx.autoupdate.apiserver.token.JwtToken;
  
 /**
@@ -31,19 +27,17 @@ import com.xxx.autoupdate.apiserver.token.JwtToken;
  * @author zhaoxinguo on 2017/9/13.
  */
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
-    @Autowired
     private UserDetailsService userDetailsService;
-    @Reference
-    private UserService userService; 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,UserDetailsService userDetailsService) {
         super(authenticationManager);
+        this.userDetailsService=userDetailsService;
     }
  
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
  
-        if (token == null || !token.startsWith("Bearer ")) {
+        if (token == null || !token.startsWith("token ")) {
             chain.doFilter(request, response);
             return;
         }
@@ -64,13 +58,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                   String tokenOrLicense=auth[1].trim();
                   UserEntity user = null;
                   if (!StringUtils.isEmpty(authType) && authType.equals("token") && !StringUtils.isEmpty(tokenOrLicense)) {
-                      String userId = JwtToken.unsign(tokenOrLicense, String.class);
-                      user = userService.findById(userId);
-                      String username=user.getUserName();
+                      String username = JwtToken.unsign(tokenOrLicense, String.class);
                       if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                          UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                          UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//                          authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                          UserPrincipal principal =(UserPrincipal)userDetailsService.loadUserByUsername(username);
+                          UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principal.getUser(), null, principal.getAuthorities());
+                          authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                           logger.info("authenticated user " + username + ", setting security context");
                           return authentication;
                       }

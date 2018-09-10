@@ -1,33 +1,26 @@
 package com.xxx.autoupdate.apiserver.security.config;
 
-import java.util.Arrays;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.stereotype.Component;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
+import com.xxx.autoupdate.apiserver.services.UserService;
 
 //https://blog.csdn.net/linzhiqiang0316/article/details/78358907
 //http://357029540.iteye.com/blog/2329730
@@ -49,25 +42,31 @@ import com.xxx.autoupdate.apiserver.security.service.CustomUserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/authorization/token"));
 //    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+    
+    @Reference
+    private UserService userService; 
 
     @Bean
     protected UserDetailsService customUserService() {
         return new CustomUserService();
     }
+    
+    @Value("${token.expired.time}")
+    private Long expirtedTime;
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(customUserService());
-        return daoAuthenticationProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider(){
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(customUserService());
+//        return daoAuthenticationProvider;
+//    }
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
-        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(daoAuthenticationProvider()));
-        authenticationManager.setEraseCredentialsAfterAuthentication(true);
-        return authenticationManager;
+//        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(daoAuthenticationProvider()));
+//        authenticationManager.setEraseCredentialsAfterAuthentication(true);
+        return super.authenticationManager();
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -88,8 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(daoAuthenticationProvider()).userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
-        auth.authenticationProvider(daoAuthenticationProvider());
+        auth.authenticationProvider(new CustomAuthenticationProvider(customUserService(), passwordEncoder()));
     }
 
     @Override
@@ -102,22 +100,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/authorization/token").permitAll()
                 .anyRequest().authenticated()
                 .and()
-//              .authenticationProvider(daoAuthenticationProvider())
-//              .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
-                .addFilter(new JWTLoginFilter(authenticationManager()))
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()));
-//                .requestMatchers(PROTECTED_URLS)
-//                .authenticated()
-//                .and()
-//                .formLogin().loginProcessingUrl("/authorization/token").successHandler(successHandler());
-//                .formLogin().disable()
-//                .httpBasic().disable()
-//                .logout().disable()
-//                .headers()
-//                .cacheControl();       
+                .addFilter(new JWTLoginFilter(authenticationManager(),expirtedTime))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService()));
+                        
+    
     }
 //    @Bean
 //    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
