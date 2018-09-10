@@ -15,9 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +28,7 @@ import com.xxx.autoupdate.apiserver.model.constant.Constants;
 import com.xxx.autoupdate.apiserver.token.JwtToken;
 import com.xxx.autoupdate.apiserver.util.CommonUtils;
 import com.xxx.autoupdate.apiserver.util.ResponseEntity;
+
  
 /**
  * 验证用户名密码正确后，生成一个token，并将token返回给客户端
@@ -74,6 +77,14 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("text/javascript;charset=utf-8");
     	response.addHeader("Authorization", "Bearer " + token);
     	response.getWriter().write(JSONObject.toJSONString( ResponseEntity.ok(map),SerializerFeature.PrettyFormat));
+    }
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response, AuthenticationException failed)
+            throws IOException, ServletException {
+        SecurityContextHolder.clearContext();
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(JSON.toJSONString("Incorrect username or password"));
     }
  
 }

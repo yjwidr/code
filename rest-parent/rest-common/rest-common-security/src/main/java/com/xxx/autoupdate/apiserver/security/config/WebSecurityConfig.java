@@ -42,9 +42,7 @@ import com.xxx.autoupdate.apiserver.services.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/authorization/token"));
 //    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
-    
-    @Reference
-    private UserService userService; 
+
 
     @Bean
     protected UserDetailsService customUserService() {
