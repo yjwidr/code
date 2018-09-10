@@ -61,13 +61,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        daoAuthenticationProvider.setUserDetailsService(customUserService());
 //        return daoAuthenticationProvider;
 //    }
-    @Bean
-    @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
+//    @Bean
+//    @Override
+//    protected AuthenticationManager authenticationManager() throws Exception {
 //        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(daoAuthenticationProvider()));
 //        authenticationManager.setEraseCredentialsAfterAuthentication(true);
-        return super.authenticationManager();
-    }
+//        return super.authenticationManager();
+//    }
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider(){
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(customUserService());
+//        return daoAuthenticationProvider;
+//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new MD5Password();

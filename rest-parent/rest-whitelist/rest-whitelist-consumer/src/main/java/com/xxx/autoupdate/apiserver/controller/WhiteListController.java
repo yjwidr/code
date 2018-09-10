@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.xxx.autoupdate.apiserver.annotation.Permission;
 import com.xxx.autoupdate.apiserver.model.SoftwareVersionEntity;
+import com.xxx.autoupdate.apiserver.model.UserEntity;
 import com.xxx.autoupdate.apiserver.model.constant.Constants;
 import com.xxx.autoupdate.apiserver.model.parameter.WhiteListUser;
 import com.xxx.autoupdate.apiserver.model.parameter.WhiteUserIds;
@@ -39,6 +40,8 @@ public class WhiteListController {
 //    @Permission(authorities={Constants.PU})
     @PreAuthorize("hasPermission(#a, '"+Constants.PU+"')")
     public ResponseEntity list(@RequestParam(name=Constants.CVIP,required = true, defaultValue = Constants.EMP) @Length(min=1, max=32, message = Constants.CVI) String cvi){
+        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+        String userName=((UserEntity)auth.getPrincipal()).getUserName();
         List<WhiteListUser> list=whiteListService.getWhiteList(cvi);
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();
         filterProvider.addFilter(SoftwareVersionEntity.class.getName(),SimpleBeanPropertyFilter.filterOutAllExcept(new String[] {Constants.VER,Constants.NAME,Constants.DESC,Constants.CT,Constants.UT}));
