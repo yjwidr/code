@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.xxx.autoupdate.apiserver.exception.ErrorCodes;
 import com.xxx.autoupdate.apiserver.model.UserEntity;
 import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
 import com.xxx.autoupdate.apiserver.services.UserService;
@@ -20,6 +21,7 @@ public class CustomUserService implements UserDetailsService {
     private static final Logger logger = LogManager.getLogger(CustomUserService.class.getName());
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try {
         logger.info("username={}",username);
         UserDetails userDetails = null;
         UserEntity userEntity = userService.findByUsername(username);
@@ -27,5 +29,8 @@ public class CustomUserService implements UserDetailsService {
         userEntity.setAuthorities(authoritiesList);
         userDetails = new UserPrincipal(userEntity);
         return userDetails;
+        }catch(Exception e) {
+            throw new  UsernameNotFoundException(ErrorCodes.ERROR_USERNAME_NOT_EXISTS.getMessage());
+        }
     }
 }

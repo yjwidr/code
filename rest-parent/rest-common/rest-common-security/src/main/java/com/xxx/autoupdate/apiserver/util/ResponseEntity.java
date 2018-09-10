@@ -1,5 +1,7 @@
 package com.xxx.autoupdate.apiserver.util;
 
+import com.xxx.autoupdate.apiserver.exception.ErrorCodes;
+
 public class ResponseEntity {
 
     private final String errorMsg;
@@ -53,6 +55,10 @@ public class ResponseEntity {
 
     public static ResponseEntity unauthorized() {
         return new ResponseEntity(401, "unauthorized");
+    }
+    
+    public static ResponseEntity usernameOrPasswordIncorrect() {
+        return new ResponseEntity(ErrorCodes.ERROR_USERNAME_PASSWORD.getCode(), ErrorCodes.ERROR_USERNAME_PASSWORD.getMessage());
     }
 
     public static ResponseEntity serverInternalError() {

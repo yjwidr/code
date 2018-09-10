@@ -53,8 +53,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
         	ObjectMapper mapper = new ObjectMapper(); 
-        	Map result = null; 
-        	result = mapper.readValue(request.getReader(), Map.class); 
+        	Map result = mapper.readValue(request.getReader(), Map.class); 
         	String username = (String)result.get("userName"); 
         	String password =CommonUtils.base64decode((String)result.get("password"));
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
@@ -84,7 +83,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
             throws IOException, ServletException {
         SecurityContextHolder.clearContext();
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(JSON.toJSONString("Incorrect username or password"));
+        response.getWriter().write(JSON.toJSONString(ResponseEntity.usernameOrPasswordIncorrect(),SerializerFeature.PrettyFormat));
     }
  
 }

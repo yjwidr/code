@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -111,6 +112,12 @@ public class ExceptionAdvice {
     public ResponseEntity handleException(Exception e) {
         logger.error(e.getMessage(),e);
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(),getInitMsg(e));
+    }
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity handleAccessDeniedException(Exception e) {
+        logger.error(e.getMessage(),e);
+        return new ResponseEntity(HttpStatus.FORBIDDEN.value(),getInitMsg(e));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

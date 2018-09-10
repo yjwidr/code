@@ -96,21 +96,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-                .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new JWTLoginFilter(authenticationManager(),expirtedTime))
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService()));
-                        
-    
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+            .and()
+            .authorizeRequests()
+            .anyRequest().authenticated()
+            .and()
+            .addFilter(new JWTLoginFilter(authenticationManager(),expirtedTime))
+            .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService()));
     }
 //    @Bean
 //    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {

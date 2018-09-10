@@ -1,17 +1,14 @@
 package com.xxx.autoupdate.apiserver.security.config;
 
-import java.util.ArrayList;
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.xxx.autoupdate.apiserver.exception.ErrorCodes;
 import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
 
 /**
@@ -37,15 +34,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         // 认证逻辑
         UserPrincipal principal =(UserPrincipal)userDetailsService.loadUserByUsername(name);
-        if (null != principal) {
-            if (md5Password.matches(password, principal.getPassword())) {
-                Authentication auth = new UsernamePasswordAuthenticationToken(principal.getUser(), password, principal.getAuthorities());
-                return auth;
-            } else {
-                throw new BadCredentialsException("密码错误");
-            }
+        if (md5Password.matches(password, principal.getPassword())) {
+            Authentication auth = new UsernamePasswordAuthenticationToken(principal.getUser(), password, principal.getAuthorities());
+            return auth;
         } else {
-            throw new UsernameNotFoundException("用户不存在");
+            throw new BadCredentialsException(ErrorCodes.ERROR_USERNAME_PASSWORD.getMessage());
         }
     }
 
