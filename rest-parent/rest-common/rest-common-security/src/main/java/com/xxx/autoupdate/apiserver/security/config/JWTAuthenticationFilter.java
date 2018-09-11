@@ -9,12 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.util.StringUtils;
 
 import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
@@ -46,9 +44,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
         chain.doFilter(request, response);
     }
  
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) throws IOException,AuthenticationException {
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) throws IOException {
         UsernamePasswordAuthenticationToken authentication =null;
-        try {
         String authorization = request.getHeader("Authorization");
         if (!StringUtils.isEmpty(authorization)) {
           String[] auth = authorization.split(" ");
@@ -66,9 +63,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
               }
               }
           }
-        }
-        }catch(Exception e) {
-            throw new NonceExpiredException(e.getMessage());
         }
         return authentication;
     }
