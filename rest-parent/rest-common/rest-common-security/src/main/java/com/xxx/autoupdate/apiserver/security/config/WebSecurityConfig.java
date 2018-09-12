@@ -35,7 +35,8 @@ import com.xxx.autoupdate.apiserver.services.UserService;
 //https://blog.csdn.net/sxdtzhaoxinguo/article/details/77965226
 //http://godjohnny.iteye.com/blog/2319877
 //http://www.cnblogs.com/softidea/p/6229553.html
-//https://blog.csdn.net/iverson2010112228/article/details/52837579	
+//https://blog.csdn.net/iverson2010112228/article/details/52837579
+//http://projects.spring.io/spring-security-oauth/docs/oauth2.html
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
