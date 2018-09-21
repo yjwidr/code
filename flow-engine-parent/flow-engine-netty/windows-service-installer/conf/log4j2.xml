@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://blog.csdn.net/autfish/article/details/51203709 -->
+<Configuration status="WARN" monitorInterval="300">  
+    <properties>  
+        <property name="LOG_HOME">logs</property>
+        <property name="FILE_NAME">flow-engine</property>
+    </properties>  
+    <Appenders>  
+        <Console name="Console" target="SYSTEM_OUT">  
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %l %-5level %logger{36} - %msg%n" />  
+        </Console>  
+        <RollingRandomAccessFile name="FlowEngineLogFile"
+            fileName="${LOG_HOME}/${FILE_NAME}.log"
+            filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}.log">  
+            <PatternLayout  
+                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %l %-5level %logger{36} - %msg%n" />                
+            <Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>  
+            </Policies>  
+            <DefaultRolloverStrategy max="5000" />
+        </RollingRandomAccessFile>  
+    </Appenders>    
+    <Loggers>
+        <Logger name="com.netbrain" level="info" additivity="false">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />   
+        </Logger>
+        <Logger name="com.netbrain.xf.flowengine.scheduler" level="debug" additivity="false">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />   
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />  
+        </Root>  
+    </Loggers>  
+</Configuration>  

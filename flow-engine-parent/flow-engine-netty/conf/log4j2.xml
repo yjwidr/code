@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://blog.csdn.net/autfish/article/details/51203709 -->
+<Configuration status="WARN" monitorInterval="10">
+    <properties>  
+        <property name="LOG_HOME">logs</property>
+        <property name="FILE_NAME">task-engine</property>
+    </properties>  
+    <Appenders>  
+        <Console name="Console" target="SYSTEM_OUT">  
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1.} %-5level - %msg%n" />
+        </Console>  
+        <RollingRandomAccessFile name="FlowEngineLogFile"
+            fileName="${LOG_HOME}/${FILE_NAME}.log"
+            filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout  
+                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1.} %-5level - %msg%n" />
+            <Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>  
+            <DefaultRolloverStrategy max="1000" />
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="HourSummaryLog"
+                                 fileName="${env:ProgramData}/NetBrain/HourLog/${FILE_NAME}.log"
+                                 filePattern="${env:ProgramData}/NetBrain/HourLog/${FILE_NAME}summary_888_%d{yyyyMMdd}-%i.log">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1.} %-5level - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1000" />
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="HourLog"
+                                 fileName="${env:ProgramData}/NetBrain/HourLog/${FILE_NAME}.log"
+                                 filePattern="${env:ProgramData}/NetBrain/HourLog/${FILE_NAME}_888_%d{yyyyMMdd}-%i.log">
+            <!-- Prints out logs every hour between 00:10 and 00:25, see https://logging.apache.org/log4j/2.0/manual/filters.html -->
+            <!-- a bunch of NEUTRAL with one last DENY can give us the effect of logic "or" between these filters-->
+            <Filters>
+                <TimeFilter start="00:00:10" end="00:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="01:00:10" end="01:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="02:00:10" end="02:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="03:00:10" end="03:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="04:00:10" end="04:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="05:00:10" end="05:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="06:00:10" end="06:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="07:00:10" end="07:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="08:00:10" end="08:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="09:00:10" end="09:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="10:00:10" end="10:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="11:00:10" end="11:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="12:00:10" end="12:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="13:00:10" end="13:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="14:00:10" end="14:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="15:00:10" end="15:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="16:00:10" end="16:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="17:00:10" end="17:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="18:00:10" end="18:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="19:00:10" end="19:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="20:00:10" end="20:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="21:00:10" end="21:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="22:00:10" end="22:00:25" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <TimeFilter start="23:00:10" end="23:00:25" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1.} %-5level - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1000" />
+        </RollingRandomAccessFile>
+    </Appenders>    
+    <Loggers>
+        <Logger name="com.netbrain" level="debug" additivity="false">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />   
+        </Logger>
+        <Logger name="com.netbrain.xf.flowengine.scheduler" level="debug" additivity="false">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />   
+        </Logger>
+        <Logger name="com.netbrain.xf" level="debug" additivity="false">
+            <AppenderRef ref="HourLog"/>
+        </Logger>
+        <Logger name="StatusReporter" level="debug" additivity="false">
+            <AppenderRef ref="HourSummaryLog" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="FlowEngineLogFile" />
+            <AppenderRef ref="Console" />
+        </Root>  
+    </Loggers>  
+</Configuration>  

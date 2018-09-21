@@ -1,0 +1,66 @@
+<!--
+    Copyright (c) 2016 Oleg Nenashev and other contributors
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+    software and associated documentation files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or 
+    substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING 
+    BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!--
+ This is an example of a minimal Windows Service Wrapper configuration, which includes only mandatiory options.
+ 
+ This configuration file should be placed near the WinSW executable, the name should be the same.
+ E.g. for myapp.exe the configuration file name should be myapp.xml
+ 
+ You can find more information about the configuration options here: https://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md
+ Full example: https://github.com/kohsuke/winsw/blob/sample-config-file/examples/allOptions.xml
+-->
+<configuration>
+  
+  <!-- ID of the service. It should be unique accross the Windows system-->
+  <id>NetBrainTaskEngine</id>
+  <!-- Display name of the service -->
+  <name>NetBrainTaskEngine</name>
+  <!-- Service description -->
+  <description>NetBrain Task Engine Service, Copyright NetBrain Technologies, Inc.</description>
+  <env name="Task_ENGINE_HOME" value="%BASE%"/>
+  <executable>%JAVA_HOME%\bin\java.exe</executable>
+  <!-- Notice:
+  1.The SSL argument must precede the jar argument when using ssl;i.e:-Djavax.net.ssl.trustStore=%BASE%\conf\mongoStore.jks -Djavax.net.ssl.trustStorePassword=netbrain -jar "%BASE%\Task-engine-netty.jar
+  2.Remove this ssl argument if you do not use ssl;-Djavax.net.ssl.trustStore=%BASE%\conf\mongoStore.jks -Djavax.net.ssl.trustStorePassword=netbrain
+  3.Pem transfer to jks using this command: keytool -import -file root-ca.crt -alias mongoClient -keystore mongoStore.jks -storepass netbrain -noprompt 
+  -->
+  <arguments>-Xms1g -Xmx1g -XX:+HeapDumpOnOutOfMemoryError -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -Xss1m  -Xdebug -agentlib:jdwp=transport=dt_socket,address=0.0.0.0:8800,server=y,suspend=n -jar "%BASE%\Task-engine-netty.jar" --spring.config.location=.\conf\fix_taskengine.properties,.\conf\taskengine.properties</arguments>
+  <logpath>%BASE%\logs</logpath>
+  <startmode>Automatic</startmode>
+  <log mode="none">
+  </log>
+  
+  <extensions>
+	<!-- We need RunawayProcessKiller extension to kill the previous instance of Task Engine, See ENG-39741. -->
+  <extension enabled="true" 
+             className="winsw.Plugins.RunawayProcessKiller.RunawayProcessKillerExtension"
+             id="killOnStartup">
+      <!-- Absolute path to the PID file, which stores ID of the previously launched process. -->
+      <pidfile>%BASE%\pid.txt</pidfile>
+      <!-- Defines the process termination timeout in milliseconds. 
+           This timeout will be applied multiple times for each child process.
+           After the timeout WinSW will try to force kill the process.
+      -->
+      <stopTimeout>5000</stopTimeout>
+      <!-- If true, the parent process will be terminated first if the runaway process gets terminated. -->
+      <stopParentFirst>false</stopParentFirst>
+    </extension>
+  </extensions>
+</configuration>

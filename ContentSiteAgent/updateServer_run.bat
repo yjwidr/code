@@ -1,0 +1,1 @@
+java -jar target\ContentSiteAgent-0.0.1-SNAPSHOT.jar --spring.config.location=file:./conf/fix_updateservice.properties,./conf/updateservice.properties
