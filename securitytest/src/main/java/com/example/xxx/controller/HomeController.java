@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 public class HomeController {
-    @RequestMapping("/aaa")
+    @RequestMapping("/aaa/index")
     public String index(Model model) {
         return "aaa";
     }

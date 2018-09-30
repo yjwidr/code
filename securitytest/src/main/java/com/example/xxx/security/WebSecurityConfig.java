@@ -35,25 +35,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-        .sessionManagement()
-        .sessionCreationPolicy(IF_REQUIRED)
-        .and()
-        .csrf().disable()
-            .formLogin()
-            .failureUrl("/api/login?error")
-            .failureForwardUrl("/api/login?error")
-//            .loginPage("/login")
-//            .loginProcessingUrl("/login")
-            .and()
-            .rememberMe()
-//            .usernameParameter("username")
-//            .passwordParameter("password")
-//            .loginProcessingUrl("/user/login")
+   	 		http
+//   	  			.requestMatchers()
+//   	  				.antMatchers("/user/**", "/aaa")
+//   	  				.and()
+   	  			.authorizeRequests()
+   	  				.antMatchers("/user/*", "/aaa").permitAll();
+//   	  				.and()
+//   	  			.httpBasic();
+//        http
+//        .sessionManagement()
+//        .sessionCreationPolicy(IF_REQUIRED)
+//        .and()
+//        .csrf().disable()
+//            .formLogin()
+//            .failureUrl("/api/login?error")
+//            .failureForwardUrl("/api/login?error")
+////            .loginPage("/login")
+////            .loginProcessingUrl("/login")
 //            .and()
-//            .requestMatchers().antMatchers("/user/login")
-             .and()
-             .authorizeRequests()
-             .requestMatchers(PROTECTED_URLS).authenticated();
+//            .rememberMe()
+////            .usernameParameter("username")
+////            .passwordParameter("password")
+////            .loginProcessingUrl("/user/login")
+////            .and()
+////            .requestMatchers().antMatchers("/user/login")
+//             .and()
+//             .authorizeRequests()
+//             .requestMatchers(PROTECTED_URLS).authenticated();
     }
 }
