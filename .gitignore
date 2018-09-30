@@ -1,7 +1,7 @@
 *.classpath
 *.project
-*.class
+*.springBeans
+*.factorypath
 target/
 .settings/
 logs/
-*.springBeans
