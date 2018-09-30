@@ -53,27 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${token.expired.time}")
     private Long expirtedTime;
 
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(customUserService());
-//        return daoAuthenticationProvider;
-//    }
-//    @Bean
-//    @Override
-//    protected AuthenticationManager authenticationManager() throws Exception {
-//        ProviderManager authenticationManager = new ProviderManager(Arrays.asList(daoAuthenticationProvider()));
-//        authenticationManager.setEraseCredentialsAfterAuthentication(true);
-//        return super.authenticationManager();
-//    }
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider(){
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(customUserService());
-//        return daoAuthenticationProvider;
-//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new MD5Password();
@@ -83,14 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomPermissionEvaluator();
     }
 
-//    @Bean
-//    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-//        return new JwtAuthenticationTokenFilter();
-//    }
-//    @Override
-//    public void configure(final WebSecurity web) {
-//      web.ignoring().requestMatchers(PUBLIC_URLS);
-//    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(new CustomAuthenticationProvider(customUserService(), passwordEncoder()));
@@ -111,32 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(new JWTLoginFilter(authenticationManager(),expirtedTime))
             .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService()));
     }
-//    @Bean
-//    protected TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
-//        final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
-//        filter.setAuthenticationManager(authenticationManager());
-//        filter.setAuthenticationSuccessHandler(successHandler());
-//        return filter;
-//    }
-
-//    @Bean
-//    public SimpleUrlAuthenticationSuccessHandler successHandler() {
-//        final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-//        successHandler.setRedirectStrategy(new NoRedirectStrategy());
-//        return successHandler;
-//    }
-    
-//    public static class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-//        @Override
-//        public void onAuthenticationSuccess(HttpServletRequest request,HttpServletResponse response, Authentication authentication)throws ServletException, IOException {
-//            clearAuthenticationAttributes(request);
-//        }
-//        @Override
-//        public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-//            super.setRedirectStrategy(new NoRedirectStrategy());
-//        }
-//    }
-    
+  
     public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
         @Override
         protected MethodSecurityExpressionHandler createExpressionHandler() {
