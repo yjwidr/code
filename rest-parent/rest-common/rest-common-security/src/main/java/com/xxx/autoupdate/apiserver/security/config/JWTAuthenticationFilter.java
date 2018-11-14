@@ -7,29 +7,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.xxx.autoupdate.apiserver.exception.CustomerAuthenticationException;
+import com.xxx.autoupdate.apiserver.exception.ErrorCodes;
 import com.xxx.autoupdate.apiserver.security.model.UserPrincipal;
 import com.xxx.autoupdate.apiserver.token.JwtToken;
  
-/**
- * token的校验
- * 该类继承自BasicAuthenticationFilter，在doFilterInternal方法中，
- * 从http头的Authorization 项读取token数据，然后用Jwts包提供的方法校验token的合法性。
- * 如果校验通过，就认为这是一个取得授权的合法请求
- * @author zhaoxinguo on 2017/9/13.
- */
+
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
+	private static final Logger logger = LogManager.getLogger(JWTAuthenticationFilter.class.getName());
     private UserDetailsService userDetailsService;
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,UserDetailsService userDetailsService) {
+    private AuthenticationEntryPoint authenticationEntryPoint;
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,UserDetailsService userDetailsService,AuthenticationEntryPoint authenticationEntryPoint) {
         super(authenticationManager);
-        this.userDetailsService=userDetailsService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.userDetailsService = userDetailsService;
     }
  
     @Override
@@ -39,12 +43,27 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+        UsernamePasswordAuthenticationToken authentication=null;
+        CustomerAuthenticationException customerAuthenticationException=null;
+        try {
+        	authentication = getAuthentication(request);
+        }catch (Exception failed) {
+			SecurityContextHolder.clearContext();
+			if(failed instanceof  CustomerAuthenticationException) {
+				customerAuthenticationException=(CustomerAuthenticationException)failed;
+			}else {
+				customerAuthenticationException=new CustomerAuthenticationException(ErrorCodes.ERROR_AUTH_OTHER,failed.getMessage());
+			}
+			logger.debug("Authentication request for failed: " + failed);
+			authenticationEntryPoint.commence(request, response, customerAuthenticationException);
+			return;
+		}
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
  
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) throws IOException {
+    	
         UsernamePasswordAuthenticationToken authentication =null;
         String authorization = request.getHeader("Authorization");
         if (!StringUtils.isEmpty(authorization)) {

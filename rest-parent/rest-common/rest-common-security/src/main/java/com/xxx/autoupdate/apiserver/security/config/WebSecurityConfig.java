@@ -81,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
             .and()
             .addFilter(new JWTLoginFilter(authenticationManager(),expirtedTime))
-            .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService()));
+            .addFilter(new JWTAuthenticationFilter(authenticationManager(),customUserService(),new RestAuthenticationEntryPoint()));
     }
   
     public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {

@@ -31,7 +31,11 @@
             <AppenderRef ref="apiserver" />
             <AppenderRef ref="Console" />   
         </Logger>
-        <Root level="info">
+        <Logger name="springframework.security" level="debug" additivity="false">
+            <AppenderRef ref="apiserver" />
+            <AppenderRef ref="Console" />   
+        </Logger>        
+        <Root level="debug">
             <AppenderRef ref="apiserver" />
             <AppenderRef ref="Console" />
         </Root>  

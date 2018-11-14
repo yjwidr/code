@@ -29,7 +29,9 @@ public enum ErrorCodes {
     ERROR_CANT_FIND_WHOLE_CONTENTVERSION(10026,"can't find content version(whole):%d.%d.0@%s"),
     ERROR_CONTENT_VERSION_INVALID(10027,"content version not conform to the regulation."),
     ERROR_WHOLE_PACKAGE_REVISION_MUSTBE_0(10028, "whole package revision must be 0."),
-    ERROR_RANGE_OF_CONTENT_VERSION_INVALID(10029,"range of content version invalid.");
+    ERROR_RANGE_OF_CONTENT_VERSION_INVALID(10029,"range of content version invalid."),
+	ERROR_TOKEN_EXPRIED(10030,"Token expired."),
+	ERROR_AUTH_OTHER(20000,"%s");
 
     private int code;
     private String message;
