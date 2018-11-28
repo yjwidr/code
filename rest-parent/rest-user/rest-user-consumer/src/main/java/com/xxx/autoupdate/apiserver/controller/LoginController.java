@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.xxx.autoupdate.apiserver.SecurityOauth2Launcher;
 import com.xxx.autoupdate.apiserver.model.UserEntity;
 import com.xxx.autoupdate.apiserver.model.constant.Constants;
 import com.xxx.autoupdate.apiserver.model.parameter.LoginUser;
@@ -28,7 +27,7 @@ import com.xxx.autoupdate.apiserver.util.ResponseEntity;
 @RestController
 @RequestMapping(Constants.AUTH)
 public class LoginController {
-    private static Logger logger = LogManager.getLogger(SecurityOauth2Launcher.class.getName());
+    private static Logger logger = LogManager.getLogger(LoginController.class.getName());
     @Reference
     private UserService userService;
     @Value("${token.expired.time}")
