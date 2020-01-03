@@ -31,7 +31,7 @@
 		<springboot.version>2.1.0.RELEASE</springboot.version>
 		<postgresql.version>42.2.2</postgresql.version>
 		<jackson-annotations.version>2.9.6</jackson-annotations.version>
-		<spring-security-oauth2.version>2.3.3.RELEASE</spring-security-oauth2.version>
+		<spring-security-oauth2.version>2.3.6.RELEASE</spring-security-oauth2.version>
 		<springfox-swagger2.version>2.7.0</springfox-swagger2.version>
 		<javassist.version>3.23.1-GA</javassist.version>
 		<hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
