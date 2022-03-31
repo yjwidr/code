@@ -28,7 +28,7 @@
 		<commons-fileupload.version>1.2</commons-fileupload.version>
 		<commons-io.version>1.3.2</commons-io.version>
 		<nb.kc.version>0.0.1-SNAPSHOT</nb.kc.version>
-		<springboot.version>2.1.0.RELEASE</springboot.version>
+		<springboot.version>2.5.12</springboot.version>
 		<postgresql.version>42.2.2</postgresql.version>
 		<jackson-annotations.version>2.9.6</jackson-annotations.version>
 		<spring-security-oauth2.version>2.3.3.RELEASE</spring-security-oauth2.version>
