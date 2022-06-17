@@ -10,7 +10,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>9</java.version>
-		<fastjson.version>1.2.49</fastjson.version>
+		<fastjson.version>1.2.83</fastjson.version>
 		<bcprov.version>1.60</bcprov.version>
 	</properties>
 	<parent>
